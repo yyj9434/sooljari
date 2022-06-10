@@ -1,8 +1,19 @@
-
 const express = require("express"),
 app = express(),
 nodeml = require("./controllers/nodeml.cf"),
-layouts = require("express-ejs-layouts");
+layouts = require("express-ejs-layouts"),
+mongoose = require("mongoose");
+
+mongoose.connect(
+  "mongodb://localhost:27017/sooljari",
+  {useNewUrlParser : true}
+);
+
+const db = mongoose.connection;
+
+db.once("open", () => {
+  console.log("MongoDB connected.")
+});
 
 app.set("port", process.env.PORT || 3000);
 app.set("view engine", "ejs");

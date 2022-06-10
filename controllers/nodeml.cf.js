@@ -1,5 +1,22 @@
+const mongoose = require("mongoose");
+const MongoClient = require("mongodb").MongoClient;
+
+const url = "mongodb://localhost:27017/sooljari"
+
+var Schema = mongoose.Schema;
+
+// var drinksSchema = new Schema(
+//     { 
+//         index : String,
+//         drinksName : String,
+//         drinksPrice : String
+//     }
+// )
+
+// var Drink = mongoose.model('Drink', drinksSchema);
+
 exports.recommendation = (req, res) => {
-    
+
     let paramsUserId = req.params.userId;
     const {sample, CF, evaluation} = require('../node_modules/nodeml');
 
@@ -33,9 +50,27 @@ exports.recommendation = (req, res) => {
     
     // recommend for 100 users, each 40 movie
     let result = cf.recommendToUsers(users, 2);
-    console.log(result);
-    console.log(result[paramsUserId]);
 
-    res.render("index", { recommend : result[paramsUserId]});
+    let rec1, rec2;
+
+    MongoClient.connect(url, (err ,db) => {
+        let dbo = db.db("sooljari");
+
+        rec1 = dbo.collection("drinks").findOne({index : {$eq : result[paramsUserId][0].itemId }});
+        rec2 = dbo.collection("drinks").findOne({index : {$eq : result[paramsUserId][1].itemId }});
+
+        console.log(rec1);
+    })
+
+     //Drink.find({index : {$eq : result[paramsUserId][0].itemId }});
+     //Drink.find({index : {$eq : result[paramsUserId][1].itemId }});
+
+    console.log(rec1);
+    console.log(rec2);
+
+    //let drinksData = Drink.find({index : {$eq : paramsUserId}})
+
+
+    res.render("index", rec1, rec2);
 
 };
