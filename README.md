@@ -4,11 +4,11 @@
 #### WebApp으로 개발 예정
 ***
 >현재
->>FrontEnd : EJS
+>>FrontEnd : EJS /
 >>BackEnd : Node.js
 >>
 >추후
->>FrontEnd : React
+>>FrontEnd : React /
 >>BackEnd Spring
 >>으로 바꿀 예정
 ***
